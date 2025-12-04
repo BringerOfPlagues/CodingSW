@@ -1,10 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Zeichenfeld extends JPanel {
 
     private BufferedImage bild;
+    private int pushX;
+    private int pushY;
+    private int releaseX;
+    private int releaseY;
 
     //Hier wird die Zeichenfläche erstellt
     public Zeichenfeld () {
@@ -20,6 +26,32 @@ public class Zeichenfeld extends JPanel {
 
         //Die gewünschten Dimensionen für die Fläche angeben
         setPreferredSize(new Dimension(breite, hoehe));
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                //Koordinaten beim Drücken der Maustaste in Variablen schreiben
+                pushX = e.getX();
+                pushY = e.getY();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                //Koordinaten beim Loslassen der Maustaste in Variablen schreiben
+                releaseX = e.getX();
+                releaseY = e.getY();
+
+                //Beim Loslassen die Linie erscheinen lassen
+                Graphics2D Grafik2D = bild.createGraphics();
+                Grafik2D.setColor(Color.BLACK); // Farbauswahl: Schwarz
+                Grafik2D.drawLine(pushX, pushY, releaseX, releaseY); //Linie zeichnen
+                Grafik2D.dispose(); //schließen
+
+                repaint();//Zeichenfeld updaten
+            }
+        });
     }
 
     //Zum Leeren der Zeichenfläche

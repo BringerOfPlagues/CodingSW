@@ -28,8 +28,14 @@ public class Grafikprogramm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //FUNKTION MUSS NOCH IMPLEMENTIERT WERDEN!!!!!
+                //TODO: Ein Action-Listener für Button und Items, da beide das selbe machen
 
+                //Ein neues Pop-up Fenster erscheint, in dem man bestätigen muss, dass die Fläche initialisiert wird
+                int sicher = JOptionPane.showConfirmDialog(Grafikprogramm.this,
+                "Sind Sie sicher, dass Sie eine neue Datei anlegen wollen?\nNicht gespeicherte Änderungen gehen verloren!");
+
+                //Betätigt man "Ja" wird sicher auf 0 gesetzt
+                if (sicher == 0) zeichenfeld.leeren();
             }
         });
 
@@ -84,7 +90,12 @@ public class Grafikprogramm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //FUNKTION MUSS NOCH IMPLEMENTIERT WERDEN!!!!!
+                //Ein neues Pop-up Fenster erscheint, in dem man bestätigen muss, dass die Fläche initialisiert wird
+                int sicher = JOptionPane.showConfirmDialog(Grafikprogramm.this,
+                "Sind Sie sicher, dass Sie eine neue Datei anlegen wollen?\nNicht gespeicherte Änderungen gehen verloren!");
+
+                //Betätigt man "Ja" wird sicher auf 0 gesetzt
+                if (sicher == 0) zeichenfeld.leeren();
 
             }
         });
