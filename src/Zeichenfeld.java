@@ -78,7 +78,6 @@ public class Zeichenfeld extends JPanel {
                 }
 
                 Grafik2D.dispose(); //schließen
-
                 repaint();//Zeichenfeld updaten
             }
         });

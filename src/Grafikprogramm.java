@@ -126,6 +126,42 @@ public class Grafikprogramm extends JFrame {
             }
         });
 
+        JButton buttonLinie = new JButton("Linie");
+        buttonLinie.setToolTipText("Werkzeug Linie");
+        toolbar.add(buttonLinie);
+
+        buttonLinie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            zeichenfeld.setTool(Zeichenfeld.toolLinie);
+            }
+        });
+
+        JButton buttonRechteck = new JButton("Rechteck");
+        buttonRechteck.setToolTipText("Werkzeug Rechteck");
+        toolbar.add(buttonRechteck);
+
+        buttonRechteck.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                zeichenfeld.setTool(Zeichenfeld.toolRechteck);
+            }
+        });
+
+        JButton buttonEllipse = new JButton("Ellipse");
+        buttonEllipse.setToolTipText("Werkzeug Ellipse");
+        toolbar.add(buttonEllipse);
+
+        buttonEllipse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                zeichenfeld.setTool(Zeichenfeld.toolEllipse);
+            }
+        });
+
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
 
