@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
@@ -22,6 +24,7 @@ public class Grafikprogramm extends JFrame {
         setLocationRelativeTo(null); //Fenster zentrieren
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //ActionListener für alle Datei-Funktionen
         ActionListener dateiListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -29,10 +32,11 @@ public class Grafikprogramm extends JFrame {
 
                 switch (action) {
                     case actionNeu:
+                        //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Feld leeren möchte
                         int sicher = JOptionPane.showConfirmDialog(Grafikprogramm.this,
                                 "Sind Sie sicher, dass Sie eine neue Datei anlegen wollen?\nNicht gespeicherte Änderungen gehen verloren!");
 
-                        //Betätigt man "Ja" wird sicher auf 0 gesetzt
+                        //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
                         if (sicher == 0) zeichenfeld.leeren();
                         break;
 
@@ -42,6 +46,29 @@ public class Grafikprogramm extends JFrame {
 
                     case actionBeenden:
                         System.exit(0);
+                        break;
+                }
+            }
+        };
+
+        //ActionListener für alle Tools
+        ActionListener toolListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String action = e.getActionCommand();
+
+                switch (action) {
+                    case actionLinie:
+                        //Aktuelles Tool auf Linie setzen
+                        zeichenfeld.setTool(Zeichenfeld.toolLinie);
+                        break;
+
+                    case actionRechteck:
+                        zeichenfeld.setTool(Zeichenfeld.toolRechteck);
+                        break;
+
+                    case actionEllipse:
+                        zeichenfeld.setTool(Zeichenfeld.toolEllipse);
                         break;
                 }
             }
@@ -105,38 +132,20 @@ public class Grafikprogramm extends JFrame {
         JButton buttonLinie = new JButton("Linie");
         buttonLinie.setToolTipText("Werkzeug Linie");
         toolbar.add(buttonLinie);
-
-        buttonLinie.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            zeichenfeld.setTool(Zeichenfeld.toolLinie);
-            }
-        });
+        buttonLinie.setActionCommand(actionLinie);
+        buttonLinie.addActionListener(toolListener);
 
         JButton buttonRechteck = new JButton("Rechteck");
         buttonRechteck.setToolTipText("Werkzeug Rechteck");
         toolbar.add(buttonRechteck);
-
-        buttonRechteck.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                zeichenfeld.setTool(Zeichenfeld.toolRechteck);
-            }
-        });
+        buttonRechteck.setActionCommand(actionRechteck);
+        buttonRechteck.addActionListener(toolListener);
 
         JButton buttonEllipse = new JButton("Ellipse");
         buttonEllipse.setToolTipText("Werkzeug Ellipse");
         toolbar.add(buttonEllipse);
-
-        buttonEllipse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                zeichenfeld.setTool(Zeichenfeld.toolEllipse);
-            }
-        });
+        buttonEllipse.setActionCommand(actionEllipse);
+        buttonEllipse.addActionListener(toolListener);
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
@@ -147,5 +156,38 @@ public class Grafikprogramm extends JFrame {
 
         setVisible(true);
     }
+
+    private FileFilter jpgFilter() {
+        return new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                //Das braucht man, damit man über Ordner und Verzeichnisse navigieren kann
+                if (f.isDirectory()) {
+                    return true;
+                }
+                //Name der ausgewählten Datei wird in Kleinbuchstaben in fileName geschrieben
+                //Dann muss man nur .jpg prüfen und kann Groß- und Kleinschreibung ignorieren
+                String fileName = f.getName().toLowerCase();
+
+                //Überprüfung, ob Datei in .jpg endet
+                return fileName.endsWith(".jpg");
+            }
+
+            @Override
+            public String getDescription() {
+                return "Nur Dateityp .jpg zulässig!";
+            }
+        };
+    }
 }
+
+
+
+
+
+
+
+
+
+
 
