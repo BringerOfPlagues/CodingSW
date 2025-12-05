@@ -12,6 +12,12 @@ public class Zeichenfeld extends JPanel {
     private int releaseX;
     private int releaseY;
 
+    public static final int toolLinie = 0;
+    public static final int toolRechteck = 1;
+    public static final int toolEllipse = 2;
+
+    int aktuellesTool = toolLinie; //im Initialzustand der Anwendung ist "Linie" ausgewählt
+
     //Hier wird die Zeichenfläche erstellt
     public Zeichenfeld () {
         int hoehe = 600;
@@ -43,15 +49,43 @@ public class Zeichenfeld extends JPanel {
                 releaseX = e.getX();
                 releaseY = e.getY();
 
-                //Beim Loslassen die Linie erscheinen lassen
+                //Beim Loslassen die Linie/Rechteck/Ellipse erscheinen lassen
                 Graphics2D Grafik2D = bild.createGraphics();
                 Grafik2D.setColor(Color.BLACK); // Farbauswahl: Schwarz
-                Grafik2D.drawLine(pushX, pushY, releaseX, releaseY); //Linie zeichnen
+
+                //Hier wird geschaut, ob X bzw. Y beim Drücken oder Loslassen kleiner ist
+                //Dadurch ergibt sich dann die linke Ecke, damit Rechteck und Ellipse richtig gezeichnet werden
+                int linkeEckeX = Math.min(pushX, releaseX);
+                int linkeEckeY = Math.min(pushY, releaseY);
+
+                //Hier werden Höhe und Breite für Rechteck und Ellipse berechnet
+                //Math.abs gibt den Betrag aus, damit keine negativen Werte auftauchen
+                int breite = Math.abs(releaseX - pushX);
+                int hoehe = Math.abs(releaseY - pushY);
+
+                switch (aktuellesTool) {
+                    case toolLinie:
+                        Grafik2D.drawLine(pushX, pushY, releaseX, releaseY);
+                        break;
+
+                    case toolRechteck:
+                        Grafik2D.drawRect(linkeEckeX, linkeEckeY, breite, hoehe);
+                        break;
+
+                    case toolEllipse:
+                        Grafik2D.drawOval(linkeEckeX, linkeEckeY, breite, hoehe);
+                        break;
+                }
+
                 Grafik2D.dispose(); //schließen
 
                 repaint();//Zeichenfeld updaten
             }
         });
+    }
+
+    public void setTool(int werkzeug) {
+        aktuellesTool = werkzeug;
     }
 
     //Zum Leeren der Zeichenfläche
