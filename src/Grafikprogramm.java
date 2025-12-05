@@ -1,9 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
@@ -43,7 +45,7 @@ public class Grafikprogramm extends JFrame {
                     case actionOeffnen:
 
                     case actionSpeichern:
-
+                        speichern();
                     case actionBeenden:
                         System.exit(0);
                         break;
@@ -179,7 +181,49 @@ public class Grafikprogramm extends JFrame {
             }
         };
     }
+
+    private void speichern() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Bild speichern");
+        //Hier wird der Filter von oben benutzt
+        fileChooser.setFileFilter(jpgFilter());
+
+        //Das Fenster für die Speicherung wird geöffnet und das was der Benutzer macht wird in auswahl geschrieben
+        int auswahl = fileChooser.showSaveDialog(this);
+
+        //Wird nur ausgeführt, wenn der Benutzer einen Pfad ausgewählt und "speichern" gedrückt hat
+        if(auswahl == JFileChooser.APPROVE_OPTION) {
+
+            //Ausgewählte Datei holen
+            File file = fileChooser.getSelectedFile();
+
+            //Dateiname holen und wieder in Kleinbuchstaben speichern, für eine einfachere Prüfung
+            String name = file.getName().toLowerCase();
+
+            if (!name.endsWith(".jpg")) {
+                //file.getParentFile() gibt uns den Pfad zum ausgewählten Ordner zurück und danach wird der Dateiname mit Endung ".jpg" angehangen
+                file = new File(file.getParentFile(), file.getName() + ".jpg");
+            }
+
+            try {
+                //Aktuelles Bild holen und als .jpg am ausgewählten Speicherort speichern. Rückgabe true, falls erfolgreich
+                boolean Speicherversuch = ImageIO.write(zeichenfeld.getBild(), "jpg", file);
+
+                if (!Speicherversuch) {
+                    //Falls nicht erfolgreich, Fehlermeldung ausgeben. Fenster im Design einer Fehlermeldung.
+                    JOptionPane.showMessageDialog(this, "Das Bild konnte nicht gespeichert werden!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+            //ImageIO.write will, dass man die IOException behandelt
+            catch (IOException e) {
+                //Wenn etwas schief läuft Fehlermeldung anzeigen
+                JOptionPane.showMessageDialog(this, "Fehler beim Speichern" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
 }
+
 
 
 
