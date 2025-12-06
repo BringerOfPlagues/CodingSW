@@ -102,8 +102,12 @@ public class Zeichenfeld extends JPanel {
     }
 
     public void ladeBild(BufferedImage laden) {
+        bild = new BufferedImage(laden.getWidth(), laden.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-        //TODO: Muss ich noch implementieren!!!
+        Graphics2D Grafik2D = bild.createGraphics();
+        Grafik2D.drawImage(laden, 0, 0, null);
+        Grafik2D.dispose();
+        repaint();
 
     }
 

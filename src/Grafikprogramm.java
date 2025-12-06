@@ -44,7 +44,7 @@ public class Grafikprogramm extends JFrame {
                         break;
 
                     case actionOeffnen:
-
+                        oeffnen();
                     case actionSpeichern:
                         speichern();
                     case actionBeenden:
@@ -244,7 +244,7 @@ public class Grafikprogramm extends JFrame {
                 }
 
                 else {
-                    // TODO: zeichenfeld.bildLaden(geladen);
+                    zeichenfeld.ladeBild(laden);
                 }
             }
 
