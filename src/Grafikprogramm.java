@@ -4,6 +4,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -219,6 +220,37 @@ public class Grafikprogramm extends JFrame {
             catch (IOException e) {
                 //Wenn etwas schief läuft Fehlermeldung anzeigen
                 JOptionPane.showMessageDialog(this, "Fehler beim Speichern" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void oeffnen () {
+        //Der Aufbau ist ähnlich wie bei der Speichern-Methode
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Bild öffnen");
+        fileChooser.setFileFilter(jpgFilter());
+
+        int auswahl = fileChooser.showSaveDialog(this);
+
+        if (auswahl == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            String name = file.getName().toLowerCase();
+
+            try {
+                //Die Pixel der .jpg-Datei werden in "laden" gespeichert, damit kann es dann auf dem Zeichenfeld wieder projeziert werden
+                BufferedImage laden = ImageIO.read(file);
+
+                if(laden == null) {
+                    JOptionPane.showMessageDialog(this, "Datei kann nicht geladen werden", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                else {
+                    // TODO: zeichenfeld.bildLaden(geladen);
+                }
+            }
+
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Fehler beim Öffnen" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

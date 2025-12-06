@@ -101,6 +101,12 @@ public class Zeichenfeld extends JPanel {
         return bild;
     }
 
+    public void ladeBild(BufferedImage laden) {
+
+        //TODO: Muss ich noch implementieren!!!
+
+    }
+
     //Hier entsteht die Funktion zum Zeichnen später
     //paintComponent wird von JComponents bereitgestellt
     @Override
