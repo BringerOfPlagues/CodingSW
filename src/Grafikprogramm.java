@@ -19,6 +19,7 @@ public class Grafikprogramm extends JFrame {
     final String actionLinie = "Linie";
     final String actionRechteck = "Rechteck";
     final String actionEllipse = "Ellipse";
+    final String actionFarbe = "Farbe";
 
 
     public Grafikprogramm() {
@@ -77,6 +78,12 @@ public class Grafikprogramm extends JFrame {
                     case actionEllipse:
                         zeichenfeld.setTool(Zeichenfeld.toolEllipse);
                         break;
+
+                    case actionFarbe:
+                        Color neueFarbe = JColorChooser.showDialog(Grafikprogramm.this, "Farbe auswählen", Color.BLACK);
+
+                        zeichenfeld.setFarbe(neueFarbe);
+                        break;
                 }
             }
         };
@@ -118,6 +125,7 @@ public class Grafikprogramm extends JFrame {
         //Toolbar erzeugen mit einfachen Funktionen
         JToolBar toolbar = new JToolBar();
 
+        //Es folgen die Buttons
         JButton buttonNeu = new JButton("Neu");
         buttonNeu.setToolTipText("Neue Datei"); //Einen Tipp anzeigen lassen, wenn man mit der Maus über das Feld geht
         toolbar.add(buttonNeu);
@@ -153,6 +161,12 @@ public class Grafikprogramm extends JFrame {
         toolbar.add(buttonEllipse);
         buttonEllipse.setActionCommand(actionEllipse);
         buttonEllipse.addActionListener(toolListener);
+
+        JButton buttonFarbe = new JButton("Farbe");
+        buttonFarbe.setToolTipText("Farbe ändern");
+        toolbar.add(buttonFarbe);
+        buttonFarbe.setActionCommand(actionFarbe);
+        buttonFarbe.addActionListener(toolListener);
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);

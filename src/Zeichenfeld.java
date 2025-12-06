@@ -11,6 +11,7 @@ public class Zeichenfeld extends JPanel {
     private int pushY;
     private int releaseX;
     private int releaseY;
+    private Color Farbauswahl = Color.BLACK;
 
     public static final int toolLinie = 0;
     public static final int toolRechteck = 1;
@@ -51,7 +52,7 @@ public class Zeichenfeld extends JPanel {
 
                 //Beim Loslassen die Linie/Rechteck/Ellipse erscheinen lassen
                 Graphics2D Grafik2D = bild.createGraphics();
-                Grafik2D.setColor(Color.BLACK); // Farbauswahl: Schwarz
+                Grafik2D.setColor(Farbauswahl);
 
                 //Hier wird geschaut, ob X bzw. Y beim Drücken oder Loslassen kleiner ist
                 //Dadurch ergibt sich dann die linke Ecke, damit Rechteck und Ellipse richtig gezeichnet werden
@@ -83,6 +84,12 @@ public class Zeichenfeld extends JPanel {
         });
     }
 
+    public void setFarbe(Color neueFarbe) {
+        if (neueFarbe != null) {
+            Farbauswahl = neueFarbe;
+        }
+    }
+
     public void setTool(int werkzeug) {
         aktuellesTool = werkzeug;
     }
@@ -109,11 +116,6 @@ public class Zeichenfeld extends JPanel {
         Grafik2D.drawImage(laden, 0, 0, null);
         Grafik2D.dispose();
 
-        //Zeichenfeld auf die neue Bildgröße anpassen
-
-        //TODO: Implementieren oder löschen
-        //setPreferredSize(new Dimension(bild.getWidth(), bild.getHeight()));
-        //revalidate(); //Änderung Layout übernehmen
         repaint();
 
     }
