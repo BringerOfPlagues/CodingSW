@@ -45,8 +45,12 @@ public class Grafikprogramm extends JFrame {
 
                     case actionOeffnen:
                         oeffnen();
+                        break;
+
                     case actionSpeichern:
                         speichern();
+                        break;
+
                     case actionBeenden:
                         System.exit(0);
                         break;
@@ -230,7 +234,7 @@ public class Grafikprogramm extends JFrame {
         fileChooser.setDialogTitle("Bild öffnen");
         fileChooser.setFileFilter(jpgFilter());
 
-        int auswahl = fileChooser.showSaveDialog(this);
+        int auswahl = fileChooser.showOpenDialog(this);
 
         if (auswahl == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
