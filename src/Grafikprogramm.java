@@ -234,7 +234,6 @@ public class Grafikprogramm extends JFrame {
 
         if (auswahl == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            String name = file.getName().toLowerCase();
 
             try {
                 //Die Pixel der .jpg-Datei werden in "laden" gespeichert, damit kann es dann auf dem Zeichenfeld wieder projeziert werden
