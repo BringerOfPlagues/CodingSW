@@ -109,13 +109,16 @@ public class Zeichenfeld extends JPanel {
     }
 
     public void ladeBild(BufferedImage laden) {
-        //Ausgwähltes Bild der Öffnen-Methode laden
+        //Ausgewähltes Bild der Öffnen-Methode laden
         bild = new BufferedImage(laden.getWidth(), laden.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D Grafik2D = bild.createGraphics();
-        Grafik2D.drawImage(laden, 0, 0, null);
+        Grafik2D.drawImage(laden, 0, 0, getWidth(), getHeight(), null);
         Grafik2D.dispose();
 
+        //Bild an die Zeichenfeldgröße anpassen
+        setPreferredSize(new Dimension(bild.getWidth(), bild.getHeight()));
+        revalidate(); //Änderung übernehmen
         repaint();
 
     }
@@ -126,6 +129,6 @@ public class Zeichenfeld extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.drawImage(bild, 0, 0, getWidth(), getHeight(), null); //Bild auf dem Zeichenfeld anzeigen lassen
+        g.drawImage(bild, 0, 0, null); //Bild auf dem Zeichenfeld anzeigen lassen
     }
 }

@@ -24,8 +24,6 @@ public class Grafikprogramm extends JFrame {
 
     public Grafikprogramm() {
         setTitle("Grafikprogramm");
-        setSize(800, 600);
-        setLocationRelativeTo(null); //Fenster zentrieren
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //ActionListener für alle Datei-Funktionen
@@ -175,6 +173,8 @@ public class Grafikprogramm extends JFrame {
         zeichenfeld = new Zeichenfeld();
         add(zeichenfeld);
 
+        pack();
+        setLocationRelativeTo(null); //Fenster zentrieren
         setVisible(true);
     }
 
@@ -263,6 +263,8 @@ public class Grafikprogramm extends JFrame {
 
                 else {
                     zeichenfeld.ladeBild(laden);
+                    pack();
+                    setLocationRelativeTo(null);
                 }
             }
 
