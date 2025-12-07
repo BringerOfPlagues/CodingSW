@@ -13,6 +13,7 @@ public class Zeichenfeld extends JPanel {
     private int releaseY;
     private int lastX;
     private int lastY;
+    private int Strichdicke = 4;
     private Color Farbauswahl = Color.BLACK;
 
     public static final int toolLinie = 0;
@@ -21,15 +22,13 @@ public class Zeichenfeld extends JPanel {
     public static final int toolRadierer = 3;
     public static final int toolStift = 4;
 
-    private final int hoehe = 800;
-    private final int breite = 1200;
-
 
     int aktuellesTool = toolLinie; //im Initialzustand der Anwendung ist "Linie" ausgewählt
 
     //Hier wird die Zeichenfläche erstellt
     public Zeichenfeld () {
-
+        int breite = 1200;
+        int hoehe = 800;
         bild = new BufferedImage(breite, hoehe, BufferedImage.TYPE_INT_RGB);
 
         Graphics2D Grafik2D = bild.createGraphics(); //zum Bearbeiten des BufferedImage
@@ -76,14 +75,17 @@ public class Zeichenfeld extends JPanel {
 
                 switch (aktuellesTool) {
                     case toolLinie:
+                        Grafik2D.setStroke(new BasicStroke(Strichdicke)); //Zur Änderung der Strichdicke
                         Grafik2D.drawLine(pushX, pushY, releaseX, releaseY); //Linie zeichnen von Drücken zu Loslassen
                         break;
 
                     case toolRechteck:
+                        Grafik2D.setStroke(new BasicStroke(Strichdicke));
                         Grafik2D.drawRect(linkeEckeX, linkeEckeY, breite, hoehe);
                         break;
 
                     case toolEllipse:
+                        Grafik2D.setStroke(new BasicStroke(Strichdicke));
                         Grafik2D.drawOval(linkeEckeX, linkeEckeY, breite, hoehe);
                         break;
                 }
@@ -100,10 +102,9 @@ public class Zeichenfeld extends JPanel {
 
                     int x = e.getX(); //Aktuelle Koordinaten holen und speichern
                     int y = e.getY();
-                    int groesseRadierer = 25; //Größe Radierer
 
                     //Damit kann man Dicke und Form des Radierers einstellen. Hier sind die Linie und Ecken rund
-                    Grafik2D.setStroke(new BasicStroke(groesseRadierer, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    Grafik2D.setStroke(new BasicStroke(Strichdicke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                     Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
                     Grafik2D.dispose();
                     repaint();
@@ -118,10 +119,9 @@ public class Zeichenfeld extends JPanel {
 
                     int x = e.getX(); //Aktuelle Koordinaten holen und speichern
                     int y = e.getY();
-                    int groesseStift = 5; //Größe Stift
 
                     //Damit kann man Dicke und Form des Stifts einstellen. Hier sind die Linie und Ecken rund
-                    Grafik2D.setStroke(new BasicStroke(groesseStift, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    Grafik2D.setStroke(new BasicStroke(Strichdicke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                     Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
                     Grafik2D.dispose();
                     repaint();
@@ -143,6 +143,10 @@ public class Zeichenfeld extends JPanel {
 
     public void setTool(int werkzeug) {
         aktuellesTool = werkzeug;
+    }
+
+    public void setStrichdicke(int dicke) {
+        Strichdicke = dicke;
     }
 
     //Zum Leeren der Zeichenfläche
@@ -167,7 +171,6 @@ public class Zeichenfeld extends JPanel {
         Grafik2D.drawImage(laden, 0, 0, bild.getWidth(), bild.getHeight(), null);
         Grafik2D.dispose();
         repaint();
-
     }
 
     //Hier entsteht die Funktion zum Zeichnen später

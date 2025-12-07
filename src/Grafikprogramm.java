@@ -2,7 +2,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -32,71 +31,65 @@ public class Grafikprogramm extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //ActionListener für alle Datei-Funktionen
-        ActionListener dateiListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String action = e.getActionCommand();
+        ActionListener dateiListener = e -> {
+            String action = e.getActionCommand();
 
-                switch (action) {
-                    case actionNeu:
-                        //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Feld leeren möchte
-                        int sicher = JOptionPane.showConfirmDialog(Grafikprogramm.this,
-                                "Sind Sie sicher, dass Sie eine neue Datei anlegen wollen?\nNicht gespeicherte Änderungen gehen verloren!");
+            switch (action) {
+                case actionNeu:
+                    //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Feld leeren möchte
+                    int sicher = JOptionPane.showConfirmDialog(Grafikprogramm.this,
+                            "Sind Sie sicher, dass Sie eine neue Datei anlegen wollen?\nNicht gespeicherte Änderungen gehen verloren!");
 
-                        //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
-                        if (sicher == 0) zeichenfeld.leeren();
-                        break;
+                    //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
+                    if (sicher == 0) zeichenfeld.leeren();
+                    break;
 
-                    case actionOeffnen:
-                        oeffnen();
-                        break;
+                case actionOeffnen:
+                    oeffnen();
+                    break;
 
-                    case actionSpeichern:
-                        speichern();
-                        break;
+                case actionSpeichern:
+                    speichern();
+                    break;
 
-                    case actionBeenden:
-                        System.exit(0);
-                        break;
-                }
+                case actionBeenden:
+                    System.exit(0);
+                    break;
             }
         };
 
         //ActionListener für alle Tools
-        ActionListener toolListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String action = e.getActionCommand();
+        ActionListener toolListener = e -> {
+            String action = e.getActionCommand();
 
-                switch (action) {
-                    case actionLinie:
-                        //Aktuelles Tool auf Linie setzen
-                        zeichenfeld.setTool(Zeichenfeld.toolLinie);
-                        break;
+            switch (action) {
+                case actionLinie:
+                    //Aktuelles Tool auf Linie setzen
+                    zeichenfeld.setTool(Zeichenfeld.toolLinie);
+                    break;
 
-                    case actionRechteck:
-                        zeichenfeld.setTool(Zeichenfeld.toolRechteck);
-                        break;
+                case actionRechteck:
+                    zeichenfeld.setTool(Zeichenfeld.toolRechteck);
+                    break;
 
-                    case actionEllipse:
-                        zeichenfeld.setTool(Zeichenfeld.toolEllipse);
-                        break;
+                case actionEllipse:
+                    zeichenfeld.setTool(Zeichenfeld.toolEllipse);
+                    break;
 
-                    case actionStift:
-                        zeichenfeld.setTool(Zeichenfeld.toolStift);
-                        break;
+                case actionStift:
+                    zeichenfeld.setTool(Zeichenfeld.toolStift);
+                    break;
 
-                    case actionRadierer:
-                        zeichenfeld.setTool(Zeichenfeld.toolRadierer);
-                        break;
+                case actionRadierer:
+                    zeichenfeld.setTool(Zeichenfeld.toolRadierer);
+                    break;
 
-                    case actionFarbe:
-                        //Das Farbauswahl-Fenster öffnet sich, Auswahl wird in neueFarbe geschrieben
-                        Color neueFarbe = JColorChooser.showDialog(Grafikprogramm.this, "Farbe auswählen", Color.BLACK);
-                        //Aktuelle Farbe updaten
-                        zeichenfeld.setFarbe(neueFarbe);
-                        break;
-                }
+                case actionFarbe:
+                    //Das Farbauswahl-Fenster öffnet sich, Auswahl wird in neueFarbe geschrieben
+                    Color neueFarbe = JColorChooser.showDialog(Grafikprogramm.this, "Farbe auswählen", Color.BLACK);
+                    //Aktuelle Farbe updaten
+                    zeichenfeld.setFarbe(neueFarbe);
+                    break;
             }
         };
 
@@ -191,6 +184,22 @@ public class Grafikprogramm extends JFrame {
         toolbar.add(buttonFarbe);
         buttonFarbe.setActionCommand(actionFarbe);
         buttonFarbe.addActionListener(toolListener);
+
+        JLabel labelDicke = new JLabel("Dicke: 1");
+        toolbar.add(labelDicke);
+
+        //Slider für Strichdicke
+        JSlider sliderDicke = new JSlider(1, 50, 4); //Von 1 bis 50, Startwert 4
+        sliderDicke.setPreferredSize(new Dimension(120, 30)); //Breite und Länge des Sliders
+        sliderDicke.setToolTipText("Strichdicke ändern");
+        toolbar.add(sliderDicke);
+
+        //Es wird abgefragt, wo der Slider steht und dann die Dicke über setStrichdicke() dementsprechend angepasst
+        sliderDicke.addChangeListener(e -> {
+            int wert = sliderDicke.getValue();
+            labelDicke.setText("Dicke: " + wert);
+            zeichenfeld.setStrichdicke(wert);
+        });
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
