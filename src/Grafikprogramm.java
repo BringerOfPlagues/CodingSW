@@ -20,6 +20,7 @@ public class Grafikprogramm extends JFrame {
     final String actionRechteck = "Rechteck";
     final String actionEllipse = "Ellipse";
     final String actionFarbe = "Farbe";
+    final String actionRadierer = "Radierer";
 
 
     public Grafikprogramm() {
@@ -80,9 +81,14 @@ public class Grafikprogramm extends JFrame {
                         zeichenfeld.setTool(Zeichenfeld.toolEllipse);
                         break;
 
-                    case actionFarbe:
-                        Color neueFarbe = JColorChooser.showDialog(Grafikprogramm.this, "Farbe auswählen", Color.BLACK);
+                    case actionRadierer:
+                        zeichenfeld.setTool(Zeichenfeld.toolRadierer);
+                        break;
 
+                    case actionFarbe:
+                        //Das Farbauswahl-Fenster öffnet sich, Auswahl wird in neueFarbe geschrieben
+                        Color neueFarbe = JColorChooser.showDialog(Grafikprogramm.this, "Farbe auswählen", Color.BLACK);
+                        //Aktuelle Farbe updaten
                         zeichenfeld.setFarbe(neueFarbe);
                         break;
                 }
@@ -162,6 +168,12 @@ public class Grafikprogramm extends JFrame {
         toolbar.add(buttonEllipse);
         buttonEllipse.setActionCommand(actionEllipse);
         buttonEllipse.addActionListener(toolListener);
+
+        JButton buttonRadierer = new JButton("Radierer");
+        buttonRadierer.setToolTipText("Werkzeug Radierer");
+        toolbar.add(buttonRadierer);
+        buttonRadierer.setActionCommand(actionRadierer);
+        buttonRadierer.addActionListener(toolListener);
 
         JButton buttonFarbe = new JButton("Farbe");
         buttonFarbe.setToolTipText("Farbe ändern");

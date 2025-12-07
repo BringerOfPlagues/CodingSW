@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 
 public class Zeichenfeld extends JPanel {
 
-    private BufferedImage bild;
+    private final BufferedImage bild;
     private int pushX;
     private int pushY;
     private int releaseX;
@@ -16,6 +16,7 @@ public class Zeichenfeld extends JPanel {
     public static final int toolLinie = 0;
     public static final int toolRechteck = 1;
     public static final int toolEllipse = 2;
+    public static final int toolRadierer = 3;
 
     private final int hoehe = 800;
     private final int breite = 1200;
@@ -28,7 +29,7 @@ public class Zeichenfeld extends JPanel {
 
         bild = new BufferedImage(breite, hoehe, BufferedImage.TYPE_INT_RGB);
 
-        Graphics2D Grafik2D = bild.createGraphics();
+        Graphics2D Grafik2D = bild.createGraphics(); //zum Bearbeiten des BufferedImage
         Grafik2D.setColor(Color.WHITE); //Farbauswahl: weiß
         Grafik2D.fillRect(0, 0, breite, hoehe); //Hier wird das Zeichenfeld einmal komplett weiß eingefärbt
         Grafik2D.dispose(); //beenden
@@ -36,7 +37,7 @@ public class Zeichenfeld extends JPanel {
         //Die gewünschten Dimensionen für die Fläche angeben
         setPreferredSize(new Dimension(breite, hoehe));
 
-        addMouseListener(new MouseAdapter() {
+        MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
 
@@ -83,11 +84,30 @@ public class Zeichenfeld extends JPanel {
                 Grafik2D.dispose(); //schließen
                 repaint();//Zeichenfeld updaten
             }
-        });
+
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                if (aktuellesTool == toolRadierer) {
+                    Graphics2D Grafik2D = bild.createGraphics();
+                    Grafik2D.setColor(Color.WHITE); //Radierer soll natürlich weiß "zeichnen" (löschen)
+
+                    int laenge = 25; //Seitenlänge des Radierer-Quadrats
+                    int x = e.getX() - laenge / 2; // laenge / 2 muss abgezogen werden, damit das Quadrat mittig vom Mauszeiger erscheint
+                    int y = e.getY() - laenge / 2;
+
+                    //Rund zeichnen beim Ziehen des Mauszeigers über den Bildschirm
+                    Grafik2D.fillRoundRect(x, y, laenge, laenge, 90, 90);
+                    Grafik2D.dispose();
+                    repaint();
+                }
+            }
+        };
+        addMouseListener(adapter); //MouseListener hinzufügen
+        addMouseMotionListener(adapter); //MouseListener der Bewegungen erkennt hinzufügen
     }
 
     public void setFarbe(Color neueFarbe) {
-        if (neueFarbe != null) {
+        if (neueFarbe != null) { //Wenn die Methode aufgerufen wird und eine neue Farbe ausgewählt wurde --> Farbe updaten
             Farbauswahl = neueFarbe;
         }
     }
@@ -105,7 +125,7 @@ public class Zeichenfeld extends JPanel {
         repaint(); //Braucht man, um das Fenster zu aktualisieren
     }
 
-    //Zum Abspeichern des Bildes
+    //Zum Übergeben des aktuellen Bildes
     public BufferedImage getBild() {
         return bild;
     }
