@@ -17,12 +17,14 @@ public class Zeichenfeld extends JPanel {
     public static final int toolRechteck = 1;
     public static final int toolEllipse = 2;
 
+    private final int hoehe = 800;
+    private final int breite = 1200;
+
+
     int aktuellesTool = toolLinie; //im Initialzustand der Anwendung ist "Linie" ausgewählt
 
     //Hier wird die Zeichenfläche erstellt
     public Zeichenfeld () {
-        int hoehe = 600;
-        int breite = 800;
 
         bild = new BufferedImage(breite, hoehe, BufferedImage.TYPE_INT_RGB);
 
@@ -109,16 +111,12 @@ public class Zeichenfeld extends JPanel {
     }
 
     public void ladeBild(BufferedImage laden) {
-        //Ausgewähltes Bild der Öffnen-Methode laden
-        bild = new BufferedImage(laden.getWidth(), laden.getHeight(), BufferedImage.TYPE_INT_RGB);
-
         Graphics2D Grafik2D = bild.createGraphics();
-        Grafik2D.drawImage(laden, 0, 0, getWidth(), getHeight(), null);
+        Grafik2D.setColor(Color.WHITE); //Farbauswahl: weiß
+        Grafik2D.fillRect(0, 0, bild.getWidth(), bild.getHeight()); //Zeichenfeld erstmal weiß einfärben
+        //Ausgewähltes Bild der Öffnen-Methode auf das Zeichenfeld projezieren
+        Grafik2D.drawImage(laden, 0, 0, bild.getWidth(), bild.getHeight(), null);
         Grafik2D.dispose();
-
-        //Bild an die Zeichenfeldgröße anpassen
-        setPreferredSize(new Dimension(bild.getWidth(), bild.getHeight()));
-        revalidate(); //Änderung übernehmen
         repaint();
 
     }
