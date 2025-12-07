@@ -11,6 +11,8 @@ public class Zeichenfeld extends JPanel {
     private int pushY;
     private int releaseX;
     private int releaseY;
+    private int lastX;
+    private int lastY;
     private Color Farbauswahl = Color.BLACK;
 
     public static final int toolLinie = 0;
@@ -44,6 +46,10 @@ public class Zeichenfeld extends JPanel {
                 //Koordinaten beim Drücken der Maustaste in Variablen schreiben
                 pushX = e.getX();
                 pushY = e.getY();
+
+                //Die letzten Koordinaten speichern
+                lastX = pushX;
+                lastY = pushY;
             }
 
             @Override
@@ -69,7 +75,7 @@ public class Zeichenfeld extends JPanel {
 
                 switch (aktuellesTool) {
                     case toolLinie:
-                        Grafik2D.drawLine(pushX, pushY, releaseX, releaseY);
+                        Grafik2D.drawLine(pushX, pushY, releaseX, releaseY); //Linie zeichnen von Drücken zu Loslassen
                         break;
 
                     case toolRechteck:
@@ -91,14 +97,18 @@ public class Zeichenfeld extends JPanel {
                     Graphics2D Grafik2D = bild.createGraphics();
                     Grafik2D.setColor(Color.WHITE); //Radierer soll natürlich weiß "zeichnen" (löschen)
 
-                    int laenge = 25; //Seitenlänge des Radierer-Quadrats
-                    int x = e.getX() - laenge / 2; // laenge / 2 muss abgezogen werden, damit das Quadrat mittig vom Mauszeiger erscheint
-                    int y = e.getY() - laenge / 2;
+                    int x = e.getX(); //Aktuelle Koordinaten holen und speichern
+                    int y = e.getY();
+                    int groesse = 25; //Seitenlänge des Radierer-Quadrats
 
-                    //Rund zeichnen beim Ziehen des Mauszeigers über den Bildschirm
-                    Grafik2D.fillRoundRect(x, y, laenge, laenge, 90, 90);
+                    //Damit kann man Dicke und Form des Radierers einstellen. Hier sind die Linie und Ecken rund
+                    Grafik2D.setStroke(new BasicStroke(groesse, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
                     Grafik2D.dispose();
                     repaint();
+
+                    lastX = x; //Hier werden die aktuellen Koordinaten in die letzten Koordinaten geschrieben
+                    lastY = y; //Für eine durchgängige Linie
                 }
             }
         };
