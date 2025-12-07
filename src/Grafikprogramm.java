@@ -21,6 +21,7 @@ public class Grafikprogramm extends JFrame {
     final String actionEllipse = "Ellipse";
     final String actionFarbe = "Farbe";
     final String actionRadierer = "Radierer";
+    final String actionStift = "Stift";
 
 
     public Grafikprogramm() {
@@ -79,6 +80,10 @@ public class Grafikprogramm extends JFrame {
 
                     case actionEllipse:
                         zeichenfeld.setTool(Zeichenfeld.toolEllipse);
+                        break;
+
+                    case actionStift:
+                        zeichenfeld.setTool(Zeichenfeld.toolStift);
                         break;
 
                     case actionRadierer:
@@ -168,6 +173,12 @@ public class Grafikprogramm extends JFrame {
         toolbar.add(buttonEllipse);
         buttonEllipse.setActionCommand(actionEllipse);
         buttonEllipse.addActionListener(toolListener);
+
+        JButton buttonStift = new JButton("Stift");
+        buttonStift.setToolTipText("Werkzeug Stift");
+        toolbar.add(buttonStift);
+        buttonStift.setActionCommand(actionStift);
+        buttonStift.addActionListener(toolListener);
 
         JButton buttonRadierer = new JButton("Radierer");
         buttonRadierer.setToolTipText("Werkzeug Radierer");

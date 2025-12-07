@@ -19,6 +19,7 @@ public class Zeichenfeld extends JPanel {
     public static final int toolRechteck = 1;
     public static final int toolEllipse = 2;
     public static final int toolRadierer = 3;
+    public static final int toolStift = 4;
 
     private final int hoehe = 800;
     private final int breite = 1200;
@@ -99,10 +100,28 @@ public class Zeichenfeld extends JPanel {
 
                     int x = e.getX(); //Aktuelle Koordinaten holen und speichern
                     int y = e.getY();
-                    int groesse = 25; //Seitenlänge des Radierer-Quadrats
+                    int groesseRadierer = 25; //Größe Radierer
 
                     //Damit kann man Dicke und Form des Radierers einstellen. Hier sind die Linie und Ecken rund
-                    Grafik2D.setStroke(new BasicStroke(groesse, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    Grafik2D.setStroke(new BasicStroke(groesseRadierer, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
+                    Grafik2D.dispose();
+                    repaint();
+
+                    lastX = x; //Hier werden die aktuellen Koordinaten in die letzten Koordinaten geschrieben
+                    lastY = y; //Für eine durchgängige Linie
+                }
+
+                else if (aktuellesTool == toolStift) {
+                    Graphics2D Grafik2D = bild.createGraphics();
+                    Grafik2D.setColor(Farbauswahl); //Zeichnen in der ausgewählten Farbe
+
+                    int x = e.getX(); //Aktuelle Koordinaten holen und speichern
+                    int y = e.getY();
+                    int groesseStift = 5; //Größe Stift
+
+                    //Damit kann man Dicke und Form des Stifts einstellen. Hier sind die Linie und Ecken rund
+                    Grafik2D.setStroke(new BasicStroke(groesseStift, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                     Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
                     Grafik2D.dispose();
                     repaint();
