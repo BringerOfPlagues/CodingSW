@@ -15,7 +15,8 @@ import java.util.Objects;
 
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
-    public Zeichenfeld zeichenfeld;// zum später aufrufen
+    public Zeichenfeld zeichenfeld;//Zum später aufrufen
+    private JPanel vorschauDicke;//Das muss ich hier schon mal erstellen, damit ich es im toolListener aufrufen kann
 
     final String actionNeu = "Neu";
     final String actionOeffnen = "Öffnen";
@@ -100,6 +101,7 @@ public class Grafikprogramm extends JFrame {
                     Color neueFarbe = JColorChooser.showDialog(Grafikprogramm.this, "Farbe auswählen", Color.BLACK);
                     //Aktuelle Farbe updaten
                     zeichenfeld.setFarbe(neueFarbe);
+                    vorschauDicke.repaint(); //Aktualisierung Farbe des Vorschau-Punktes
                     break;
             }
         };
@@ -250,7 +252,7 @@ public class Grafikprogramm extends JFrame {
         sliderDicke.setToolTipText("Strichdicke ändern");
 
         //Vorschau für die Auswahl der Dicke
-        JPanel vorschauDicke = new JPanel() {
+        vorschauDicke = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
