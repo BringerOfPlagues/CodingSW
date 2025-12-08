@@ -16,8 +16,8 @@ public class Zeichenfeld extends JPanel {
     private int vorschauX;
     private int vorschauY;
     private boolean vorschauAktiv = false;
-    private int Strichdicke = 4;
-    public static Color Farbauswahl = Color.BLACK;
+    private int strichdicke = 4;
+    public static Color farbauswahl = Color.BLACK;
 
     public static final int toolLinie = 0;
     public static final int toolRechteck = 1;
@@ -34,10 +34,10 @@ public class Zeichenfeld extends JPanel {
         int hoehe = 800;
         bild = new BufferedImage(breite, hoehe, BufferedImage.TYPE_INT_RGB);
 
-        Graphics2D Grafik2D = bild.createGraphics(); //zum Bearbeiten des BufferedImage
-        Grafik2D.setColor(Color.WHITE); //Farbauswahl: weiß
-        Grafik2D.fillRect(0, 0, breite, hoehe); //Hier wird das Zeichenfeld einmal komplett weiß eingefärbt
-        Grafik2D.dispose(); //beenden
+        Graphics2D g2 = bild.createGraphics(); //zum Bearbeiten des BufferedImage
+        g2.setColor(Color.WHITE); //Farbauswahl: weiß
+        g2.fillRect(0, 0, breite, hoehe); //Hier wird das Zeichenfeld einmal komplett weiß eingefärbt
+        g2.dispose(); //beenden
 
         //Die gewünschten Dimensionen für die Fläche angeben
         setPreferredSize(new Dimension(breite, hoehe));
@@ -75,37 +75,9 @@ public class Zeichenfeld extends JPanel {
 
                 if (aktuellesTool == toolLinie || aktuellesTool == toolRechteck || aktuellesTool == toolEllipse) {
                     //Beim Loslassen die Linie/Rechteck/Ellipse erscheinen lassen
-                    Graphics2D Grafik2D = bild.createGraphics();
-                    Grafik2D.setColor(Farbauswahl);
-
-                    //Hier wird geschaut, ob X bzw. Y beim Drücken oder Loslassen kleiner ist
-                    //Dadurch ergibt sich dann die linke Ecke, damit Rechteck und Ellipse richtig gezeichnet werden
-                    int linkeEckeX = Math.min(pushX, releaseX);
-                    int linkeEckeY = Math.min(pushY, releaseY);
-
-                    //Hier werden Höhe und Breite für Rechteck und Ellipse berechnet
-                    //Math.abs gibt den Betrag aus, damit keine negativen Werte auftauchen
-                    int breite = Math.abs(releaseX - pushX);
-                    int hoehe = Math.abs(releaseY - pushY);
-
-                    switch (aktuellesTool) {
-                        case toolLinie:
-                            Grafik2D.setStroke(new BasicStroke(Strichdicke)); //Zur Änderung der Strichdicke
-                            Grafik2D.drawLine(pushX, pushY, releaseX, releaseY); //Linie zeichnen von Drücken zu Loslassen
-                            break;
-
-                        case toolRechteck:
-                            Grafik2D.setStroke(new BasicStroke(Strichdicke));
-                            Grafik2D.drawRect(linkeEckeX, linkeEckeY, breite, hoehe);
-                            break;
-
-                        case toolEllipse:
-                            Grafik2D.setStroke(new BasicStroke(Strichdicke));
-                            Grafik2D.drawOval(linkeEckeX, linkeEckeY, breite, hoehe);
-                            break;
-                    }
-
-                    Grafik2D.dispose(); //schließen
+                    Graphics2D g2 = bild.createGraphics();
+                    zeichneForm(g2, pushX, pushY, releaseX, releaseY);
+                    g2.dispose(); //schließen
                     repaint();//Zeichenfeld updaten
                 }
             }
@@ -123,13 +95,13 @@ public class Zeichenfeld extends JPanel {
                     repaint(); //Vorschau aktualisieren
                 }
                 if (aktuellesTool == toolRadierer) {
-                    Graphics2D Grafik2D = bild.createGraphics();
-                    Grafik2D.setColor(Color.WHITE); //Radierer soll natürlich weiß "zeichnen" (löschen)
+                    Graphics2D g2 = bild.createGraphics();
+                    g2.setColor(Color.WHITE); //Radierer soll natürlich weiß "zeichnen" (löschen)
 
                     //Damit kann man Dicke und Form des Radierers einstellen. Hier sind die Linie und Ecken rund
-                    Grafik2D.setStroke(new BasicStroke(Strichdicke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-                    Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
-                    Grafik2D.dispose();
+                    g2.setStroke(new BasicStroke(strichdicke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    g2.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
+                    g2.dispose();
                     repaint();
 
                     lastX = x; //Hier werden die aktuellen Koordinaten in die letzten Koordinaten geschrieben
@@ -137,13 +109,13 @@ public class Zeichenfeld extends JPanel {
                 }
 
                 else if (aktuellesTool == toolStift) {
-                    Graphics2D Grafik2D = bild.createGraphics();
-                    Grafik2D.setColor(Farbauswahl); //Zeichnen in der ausgewählten Farbe
+                    Graphics2D g2 = bild.createGraphics();
+                    g2.setColor(farbauswahl); //Zeichnen in der ausgewählten Farbe
 
                     //Damit kann man Dicke und Form des Stifts einstellen. Hier sind die Linie und Ecken rund
-                    Grafik2D.setStroke(new BasicStroke(Strichdicke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-                    Grafik2D.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
-                    Grafik2D.dispose();
+                    g2.setStroke(new BasicStroke(strichdicke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+                    g2.drawLine(lastX, lastY, x, y); //Linie zeichnen von letzten Koordinaten zu aktuellen Koordinaten
+                    g2.dispose();
                     repaint();
 
                     lastX = x; //Hier werden die aktuellen Koordinaten in die letzten Koordinaten geschrieben
@@ -157,7 +129,7 @@ public class Zeichenfeld extends JPanel {
 
     public void setFarbe(Color neueFarbe) {
         if (neueFarbe != null) { //Wenn die Methode aufgerufen wird und eine neue Farbe ausgewählt wurde --> Farbe updaten
-            Farbauswahl = neueFarbe;
+            farbauswahl = neueFarbe;
         }
     }
 
@@ -166,15 +138,15 @@ public class Zeichenfeld extends JPanel {
     }
 
     public void setStrichdicke(int dicke) {
-        Strichdicke = dicke;
+        strichdicke = dicke;
     }
 
     //Zum Leeren der Zeichenfläche
     public void leeren() {
-        Graphics2D Grafik2D = bild.createGraphics();
-        Grafik2D.setColor(Color.WHITE); //Farbauswahl: weiß
-        Grafik2D.fillRect(0, 0, bild.getWidth(), bild.getHeight());
-        Grafik2D.dispose();
+        Graphics2D g2 = bild.createGraphics();
+        g2.setColor(Color.WHITE); //Farbauswahl: weiß
+        g2.fillRect(0, 0, bild.getWidth(), bild.getHeight());
+        g2.dispose();
         repaint(); //Braucht man, um das Fenster zu aktualisieren
     }
 
@@ -184,14 +156,37 @@ public class Zeichenfeld extends JPanel {
     }
 
     public void ladeBild(BufferedImage laden) {
-        Graphics2D Grafik2D = bild.createGraphics();
-        Grafik2D.setColor(Color.WHITE); //Farbauswahl: weiß
-        Grafik2D.fillRect(0, 0, bild.getWidth(), bild.getHeight()); //Zeichenfeld erstmal weiß einfärben
+        Graphics2D g2 = bild.createGraphics();
+        g2.setColor(Color.WHITE); //Farbauswahl: weiß
+        g2.fillRect(0, 0, bild.getWidth(), bild.getHeight()); //Zeichenfeld erstmal weiß einfärben
         //Ausgewähltes Bild der Öffnen-Methode auf das Zeichenfeld projezieren
-        Grafik2D.drawImage(laden, 0, 0, bild.getWidth(), bild.getHeight(), null);
-        Grafik2D.dispose();
+        g2.drawImage(laden, 0, 0, bild.getWidth(), bild.getHeight(), null);
+        g2.dispose();
         repaint();
     }
+
+    private void zeichneForm(Graphics2D g2, int x1, int y1, int x2, int y2) {
+        int linkeEckeX = Math.min(x1, x2);
+        int linkeEckeY = Math.min(y1, y2);
+        int breite = Math.abs(x2 - x1);
+        int hoehe  = Math.abs(y2 - y1);
+
+        g2.setStroke(new BasicStroke(strichdicke));
+        g2.setColor(farbauswahl);
+
+        switch (aktuellesTool) {
+            case toolLinie:
+                g2.drawLine(x1, y1, x2, y2);
+                break;
+            case toolRechteck:
+                g2.drawRect(linkeEckeX, linkeEckeY, breite, hoehe);
+                break;
+            case toolEllipse:
+                g2.drawOval(linkeEckeX, linkeEckeY, breite, hoehe);
+                break;
+        }
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -202,35 +197,9 @@ public class Zeichenfeld extends JPanel {
         //Für die Vorschau
         if (vorschauAktiv && (aktuellesTool == toolLinie || aktuellesTool == toolRechteck || aktuellesTool == toolEllipse)) {
             //Vorschau anzeigen, ohne das Bild zu verändern
-            Graphics2D Grafik2D = (Graphics2D) g.create();
-
-            //Der Rest ist wie bei MouseReleased, nur statt releaseX/-Y wird vorschauX/-Y verwendet
-            Grafik2D.setColor(Farbauswahl);
-
-            int linkeEckeX = Math.min(pushX, vorschauX);
-            int linkeEckeY = Math.min(pushY, vorschauY);
-
-            int breite = Math.abs(vorschauX - pushX);
-            int hoehe = Math.abs(vorschauY - pushY);
-
-            switch (aktuellesTool) {
-                case toolLinie:
-                    Grafik2D.setStroke(new BasicStroke(Strichdicke)); //Zur Änderung der Strichdicke
-                    Grafik2D.drawLine(pushX, pushY, vorschauX, vorschauY); //Linie zeichnen von Drücken zu Loslassen
-                    break;
-
-                case toolRechteck:
-                    Grafik2D.setStroke(new BasicStroke(Strichdicke));
-                    Grafik2D.drawRect(linkeEckeX, linkeEckeY, breite, hoehe);
-                    break;
-
-                case toolEllipse:
-                    Grafik2D.setStroke(new BasicStroke(Strichdicke));
-                    Grafik2D.drawOval(linkeEckeX, linkeEckeY, breite, hoehe);
-                    break;
-            }
-
-            Grafik2D.dispose(); //schließen
+            Graphics2D g2 = (Graphics2D) g.create();
+            zeichneForm(g2, pushX, pushY, vorschauX, vorschauY);
+            g2.dispose(); //schließen
         }
     }
 }

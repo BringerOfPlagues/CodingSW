@@ -13,9 +13,10 @@ import java.util.Objects;
 // Verwendete Icons aus "Material Design Icons" – https://pictogrammers.com
 // Lizenz: Apache License 2.0
 
+//GitHub Repository: https://github.com/BringerOfPlagues/CodingSW
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
-    public Zeichenfeld zeichenfeld;//Zum später aufrufen
+    public Zeichenfeld zeichenfeld; //Zum später aufrufen
 
     //Die folgenden zwei Objekte werden im toolListener benötigt und müssen deshalb vor dem Listener zugewiesen werden
     private JPanel vorschauDicke;
@@ -37,8 +38,8 @@ public class Grafikprogramm extends JFrame {
 
     public Grafikprogramm() {
         setTitle("Grafikprogramm");
-        setSize(1200,800); //Fenstergröße setzen
-        setResizable(false); //Fenstergröße nicht veränderbar
+        setSize(1200,800);
+        setResizable(false); //feste Fenstergröße, damit Zeichenfläche und Bild immer gleich groß ist
         setLocationRelativeTo(null); //Fenster zentrieren
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -110,13 +111,13 @@ public class Grafikprogramm extends JFrame {
                     break;
 
                 case actionDicker:
-                    if (sliderDicke.getValue() <= 50) {
+                    if (sliderDicke.getValue() < sliderDicke.getMaximum()) {
                         sliderDicke.setValue(sliderDicke.getValue() + 1);
                     }
                     break;
 
                 case actionDuenner:
-                    if (sliderDicke.getValue() >= 1) {
+                    if (sliderDicke.getValue() > sliderDicke.getMinimum()) {
                         sliderDicke.setValue(sliderDicke.getValue() - 1);
                     }
                     break;
@@ -196,13 +197,13 @@ public class Grafikprogramm extends JFrame {
         menuTools.add(radiererItem);
         radiererItem.setActionCommand(actionRadierer);
         radiererItem.addActionListener(toolListener);
-        radiererItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + D
+        radiererItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Radierer: CTRL + D
 
         JMenuItem farbeItem = new JMenuItem("Farbpalette");
         menuTools.add(farbeItem);
         farbeItem.setActionCommand(actionFarbe);
         farbeItem.addActionListener(toolListener);
-        farbeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + F
+        farbeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Farbpalette: CTRL + F
 
         menuTools.addSeparator();
 
@@ -216,7 +217,7 @@ public class Grafikprogramm extends JFrame {
         menuTools.add(duennerItem);
         duennerItem.setActionCommand(actionDuenner);
         duennerItem.addActionListener(toolListener);
-        duennerItem.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.CTRL_DOWN_MASK))); //Strichdicke erhöhen: CTRL + linke Pfeiltaste
+        duennerItem.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.CTRL_DOWN_MASK))); //Strichdicke reduzieren: CTRL + linke Pfeiltaste
 
         //Toolbar erzeugen mit einfachen Funktionen
         JToolBar toolbar = new JToolBar();
@@ -290,15 +291,15 @@ public class Grafikprogramm extends JFrame {
                 super.paintComponent(g);
 
                 int dicke = sliderDicke.getValue();
-                Graphics2D Grafik2D = (Graphics2D) g.create();
-                Grafik2D.setColor(Zeichenfeld.Farbauswahl);
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(Zeichenfeld.farbauswahl);
 
                 int x = (getWidth() / 2 - dicke / 2) - 1; //Damit der Vorschau-Kreis zentriert angezeigt wird
                 int y = (getHeight() / 2 - dicke / 2) - 1; //-1, da unten der Kreis 1 px größer dargestellt wird
 
                 //Vorschau-Kreis zeichnen
-                Grafik2D.fillOval(x, y, dicke +1, dicke +1); //dicke +1, weil Vorschaudicke kleiner wirkt als die Dicke beim Zeichnen
-                Grafik2D.dispose();
+                g2.fillOval(x, y, dicke +1, dicke +1); //dicke +1, weil Vorschaudicke kleiner wirkt als die Dicke beim Zeichnen
+                g2.dispose();
             }
         };
 
@@ -436,8 +437,6 @@ public class Grafikprogramm extends JFrame {
 
                 else {
                     zeichenfeld.ladeBild(laden);
-                    pack();
-                    setLocationRelativeTo(null);
                 }
             }
 
