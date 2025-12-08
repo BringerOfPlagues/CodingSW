@@ -64,7 +64,7 @@ public class Grafikprogramm extends JFrame {
                             "Sind Sie sicher, dass Sie das Programm beenden wollen?\nNicht gespeicherte Änderungen gehen verloren!");
 
                     //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
-                    if (sicherBeenden == 0) System.exit(0);;
+                    if (sicherBeenden == 0) System.exit(0);
                     break;
             }
         };
@@ -245,21 +245,41 @@ public class Grafikprogramm extends JFrame {
         buttonFarbe.setActionCommand(actionFarbe);
         buttonFarbe.addActionListener(toolListener);
 
-        JLabel labelDicke = new JLabel("Dicke: 1");
-        toolbar.add(labelDicke);
-
         //Slider für Strichdicke
         JSlider sliderDicke = new JSlider(1, 50, 4); //Von 1 bis 50, Startwert 4
-        sliderDicke.setPreferredSize(new Dimension(120, 30)); //Breite und Länge des Sliders
+        sliderDicke.setPreferredSize(new Dimension(120, 30));//Breite und Länge des Sliders
         sliderDicke.setToolTipText("Strichdicke ändern");
-        toolbar.add(sliderDicke);
+
+        //Vorschau für die Auswahl der Dicke
+        JPanel vorschauDicke = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                int dicke = sliderDicke.getValue();
+                Graphics2D Grafik2D = (Graphics2D) g.create();
+                Grafik2D.setColor(Zeichenfeld.Farbauswahl);
+
+                int x = getWidth() / 2 - dicke / 2; //Damit der Vorschau-Kreis zentriert angezeigt wird
+                int y = getHeight() / 2 - dicke / 2;
+
+                Grafik2D.fillOval(x, y, dicke, dicke); //Vorschau-Kreis zeichnen
+                Grafik2D.dispose();
+            }
+        };
+
+        vorschauDicke.setPreferredSize(new Dimension(5, 5));
 
         //Es wird abgefragt, wo der Slider steht und dann die Dicke über setStrichdicke() dementsprechend angepasst
         sliderDicke.addChangeListener(e -> {
             int wert = sliderDicke.getValue();
-            labelDicke.setText("Dicke: " + wert);
             zeichenfeld.setStrichdicke(wert);
+            vorschauDicke.repaint(); //Aktualisierung Vorschau-Kreis
         });
+
+        toolbar.add(vorschauDicke);
+        toolbar.add(sliderDicke);
+
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);

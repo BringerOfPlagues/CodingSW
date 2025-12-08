@@ -17,7 +17,7 @@ public class Zeichenfeld extends JPanel {
     private int vorschauY;
     private boolean vorschauAktiv = false;
     private int Strichdicke = 4;
-    private Color Farbauswahl = Color.BLACK;
+    public static Color Farbauswahl = Color.BLACK;
 
     public static final int toolLinie = 0;
     public static final int toolRechteck = 1;
