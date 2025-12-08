@@ -126,10 +126,46 @@ public class Grafikprogramm extends JFrame {
         menuDatei.addSeparator(); //Trennstrich, sieht hübscher aus
 
         //Beenden-Funktion im Dateimenü erzeugen
-        JMenuItem beenden = new JMenuItem("Beenden");
-        menuDatei.add(beenden);
-        beenden.setActionCommand(actionBeenden);
-        beenden.addActionListener(dateiListener);
+        JMenuItem beendenItem = new JMenuItem("Beenden");
+        menuDatei.add(beendenItem);
+        beendenItem.setActionCommand(actionBeenden);
+        beendenItem.addActionListener(dateiListener);
+
+        //Werkzeugmenü erzeugen
+        JMenu menuTools = new JMenu("Werkzeuge");
+        menuBar.add(menuTools);
+
+        JMenuItem linieItem = new JMenuItem("Linie");
+        menuTools.add(linieItem);
+        linieItem.setActionCommand(actionLinie);
+        linieItem.addActionListener(toolListener);
+
+        JMenuItem rechteckItem = new JMenuItem("Rechteck");
+        menuTools.add(rechteckItem);
+        rechteckItem.setActionCommand(actionRechteck);
+        rechteckItem.addActionListener(toolListener);
+
+        JMenuItem ellipseItem = new JMenuItem("Ellipse");
+        menuTools.add(ellipseItem);
+        ellipseItem.setActionCommand(actionEllipse);
+        ellipseItem.addActionListener(toolListener);
+
+        menuTools.addSeparator();
+
+        JMenuItem stiftItem = new JMenuItem("Stift");
+        menuTools.add(stiftItem);
+        stiftItem.setActionCommand(actionStift);
+        stiftItem.addActionListener(toolListener);
+
+        JMenuItem radiererItem = new JMenuItem("Radierer");
+        menuTools.add(radiererItem);
+        radiererItem.setActionCommand(actionRadierer);
+        radiererItem.addActionListener(toolListener);
+
+        JMenuItem farbeItem = new JMenuItem("Farbpalette");
+        menuTools.add(farbeItem);
+        farbeItem.setActionCommand(actionFarbe);
+        farbeItem.addActionListener(toolListener);
 
         //Toolbar erzeugen mit einfachen Funktionen
         JToolBar toolbar = new JToolBar();
