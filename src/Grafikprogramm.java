@@ -16,7 +16,10 @@ import java.util.Objects;
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
     public Zeichenfeld zeichenfeld;//Zum später aufrufen
-    private JPanel vorschauDicke;//Das muss ich hier schon mal erstellen, damit ich es im toolListener aufrufen kann
+
+    //Die folgenden zwei Objekte werden im toolListener benötigt und müssen deshalb vor dem Listener zugewiesen werden
+    private JPanel vorschauDicke;
+    private JSlider sliderDicke;
 
     final String actionNeu = "Neu";
     final String actionOeffnen = "Öffnen";
@@ -28,6 +31,8 @@ public class Grafikprogramm extends JFrame {
     final String actionFarbe = "Farbe";
     final String actionRadierer = "Radierer";
     final String actionStift = "Stift";
+    final String actionDicker = "Dicker";
+    final String actionDuenner = "Dünner";
 
 
     public Grafikprogramm() {
@@ -103,6 +108,18 @@ public class Grafikprogramm extends JFrame {
                     zeichenfeld.setFarbe(neueFarbe);
                     vorschauDicke.repaint(); //Aktualisierung Farbe des Vorschau-Punktes
                     break;
+
+                case actionDicker:
+                    if (sliderDicke.getValue() <= 50) {
+                        sliderDicke.setValue(sliderDicke.getValue() + 1);
+                    }
+                    break;
+
+                case actionDuenner:
+                    if (sliderDicke.getValue() >= 1) {
+                        sliderDicke.setValue(sliderDicke.getValue() - 1);
+                    }
+                    break;
             }
         };
 
@@ -144,29 +161,30 @@ public class Grafikprogramm extends JFrame {
         beendenItem.addActionListener(dateiListener);
         beendenItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)); //Programm beenden: CTRL + Q
 
+        JMenu menuFormen = new JMenu("Formen");
+        menuBar.add(menuFormen);
+
+        JMenuItem linieItem = new JMenuItem("Linie");
+        menuFormen.add(linieItem);
+        linieItem.setActionCommand(actionLinie);
+        linieItem.addActionListener(toolListener);
+        linieItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK)); //Formauswahl Linie: CTRL + L
+
+        JMenuItem rechteckItem = new JMenuItem("Rechteck");
+        menuFormen.add(rechteckItem);
+        rechteckItem.setActionCommand(actionRechteck);
+        rechteckItem.addActionListener(toolListener);
+        rechteckItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK)); //Formauswahl Rechteck: CTRL + R
+
+        JMenuItem ellipseItem = new JMenuItem("Ellipse");
+        menuFormen.add(ellipseItem);
+        ellipseItem.setActionCommand(actionEllipse);
+        ellipseItem.addActionListener(toolListener);
+        ellipseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK)); //Formauswahl Ellipse: CTRL + E
+
         //Werkzeugmenü erzeugen
         JMenu menuTools = new JMenu("Werkzeuge");
         menuBar.add(menuTools);
-
-        JMenuItem linieItem = new JMenuItem("Linie");
-        menuTools.add(linieItem);
-        linieItem.setActionCommand(actionLinie);
-        linieItem.addActionListener(toolListener);
-        linieItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + L
-
-        JMenuItem rechteckItem = new JMenuItem("Rechteck");
-        menuTools.add(rechteckItem);
-        rechteckItem.setActionCommand(actionRechteck);
-        rechteckItem.addActionListener(toolListener);
-        rechteckItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Rechteck: CTRL + R
-
-        JMenuItem ellipseItem = new JMenuItem("Ellipse");
-        menuTools.add(ellipseItem);
-        ellipseItem.setActionCommand(actionEllipse);
-        ellipseItem.addActionListener(toolListener);
-        ellipseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Ellipse: CTRL + E
-
-        menuTools.addSeparator();
 
         JMenuItem stiftItem = new JMenuItem("Stift");
         menuTools.add(stiftItem);
@@ -185,6 +203,20 @@ public class Grafikprogramm extends JFrame {
         farbeItem.setActionCommand(actionFarbe);
         farbeItem.addActionListener(toolListener);
         farbeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + F
+
+        menuTools.addSeparator();
+
+        JMenuItem dickerItem = new JMenuItem("Dicke erhöhen");
+        menuTools.add(dickerItem);
+        dickerItem.setActionCommand(actionDicker);
+        dickerItem.addActionListener(toolListener);
+        dickerItem.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, InputEvent.CTRL_DOWN_MASK))); //Strichdicke erhöhen: CTRL + rechte Pfeiltaste
+
+        JMenuItem duennerItem = new JMenuItem("Dicke reduzieren");
+        menuTools.add(duennerItem);
+        duennerItem.setActionCommand(actionDuenner);
+        duennerItem.addActionListener(toolListener);
+        duennerItem.setAccelerator((KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, InputEvent.CTRL_DOWN_MASK))); //Strichdicke erhöhen: CTRL + linke Pfeiltaste
 
         //Toolbar erzeugen mit einfachen Funktionen
         JToolBar toolbar = new JToolBar();
@@ -248,7 +280,7 @@ public class Grafikprogramm extends JFrame {
         buttonFarbe.addActionListener(toolListener);
 
         //Slider für Strichdicke
-        JSlider sliderDicke = new JSlider(1, 50, 9); //Von 1 bis 50, Startwert 9
+        sliderDicke = new JSlider(1, 50, 9); //Von 1 bis 50, Startwert 9
         sliderDicke.setToolTipText("Strichdicke ändern");
 
         //Vorschau für die Auswahl der Dicke
