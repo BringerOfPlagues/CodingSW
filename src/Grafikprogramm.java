@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
+
+// Verwendete Icons aus "Material Design Icons" – https://pictogrammers.com
+// Lizenz: Apache License 2.0
 
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
@@ -131,55 +135,58 @@ public class Grafikprogramm extends JFrame {
         JToolBar toolbar = new JToolBar();
 
         //Es folgen die Buttons
-        JButton buttonNeu = new JButton("Neu");
+        //Icon laden aus Ordner in src. RequireNonNull prüft, ob Icon gefunden wurde
+        JButton buttonNeu = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Neu.png"))));
         buttonNeu.setToolTipText("Neue Datei"); //Einen Tipp anzeigen lassen, wenn man mit der Maus über das Feld geht
         toolbar.add(buttonNeu);
         buttonNeu.setActionCommand(actionNeu);
         buttonNeu.addActionListener(dateiListener);
 
-        JButton buttonOeffnen = new JButton("Öffnen");
+        JButton buttonOeffnen = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Oeffnen.png"))));
         buttonOeffnen.setToolTipText("Datei öffnen");
         toolbar.add(buttonOeffnen);
         buttonOeffnen.setActionCommand(actionOeffnen);
         buttonOeffnen.addActionListener(dateiListener);
 
-        JButton buttonSpeichern = new JButton("Speichern");
+        JButton buttonSpeichern = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Speichern.png"))));
         buttonSpeichern.setToolTipText("Datei speichern");
         toolbar.add(buttonSpeichern);
         buttonSpeichern.setActionCommand(actionSpeichern);
         buttonSpeichern.addActionListener(dateiListener);
 
-        JButton buttonLinie = new JButton("Linie");
-        buttonLinie.setToolTipText("Werkzeug Linie");
+        toolbar.addSeparator(); //Optische Trennung zwischen Dateifunktionen und Werkzeugfunktionen
+
+        JButton buttonLinie = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Linie.png"))));
+        buttonLinie.setToolTipText("Linie zeichnen");
         toolbar.add(buttonLinie);
         buttonLinie.setActionCommand(actionLinie);
         buttonLinie.addActionListener(toolListener);
 
-        JButton buttonRechteck = new JButton("Rechteck");
-        buttonRechteck.setToolTipText("Werkzeug Rechteck");
+        JButton buttonRechteck = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Rechteck.png"))));
+        buttonRechteck.setToolTipText("Rechteck zeichnen");
         toolbar.add(buttonRechteck);
         buttonRechteck.setActionCommand(actionRechteck);
         buttonRechteck.addActionListener(toolListener);
 
-        JButton buttonEllipse = new JButton("Ellipse");
-        buttonEllipse.setToolTipText("Werkzeug Ellipse");
+        JButton buttonEllipse = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Ellipse.png"))));
+        buttonEllipse.setToolTipText("Ellipse zeichnen");
         toolbar.add(buttonEllipse);
         buttonEllipse.setActionCommand(actionEllipse);
         buttonEllipse.addActionListener(toolListener);
 
-        JButton buttonStift = new JButton("Stift");
-        buttonStift.setToolTipText("Werkzeug Stift");
+        JButton buttonStift = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Stift.png"))));
+        buttonStift.setToolTipText("Freihandzeichnen");
         toolbar.add(buttonStift);
         buttonStift.setActionCommand(actionStift);
         buttonStift.addActionListener(toolListener);
 
-        JButton buttonRadierer = new JButton("Radierer");
-        buttonRadierer.setToolTipText("Werkzeug Radierer");
+        JButton buttonRadierer = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Radierer.png"))));
+        buttonRadierer.setToolTipText("Radierer");
         toolbar.add(buttonRadierer);
         buttonRadierer.setActionCommand(actionRadierer);
         buttonRadierer.addActionListener(toolListener);
 
-        JButton buttonFarbe = new JButton("Farbe");
+        JButton buttonFarbe = new JButton(new ImageIcon(Objects.requireNonNull(getClass().getResource("/icons/Farbpalette.png"))));
         buttonFarbe.setToolTipText("Farbe ändern");
         toolbar.add(buttonFarbe);
         buttonFarbe.setActionCommand(actionFarbe);
