@@ -246,8 +246,7 @@ public class Grafikprogramm extends JFrame {
         buttonFarbe.addActionListener(toolListener);
 
         //Slider für Strichdicke
-        JSlider sliderDicke = new JSlider(1, 50, 4); //Von 1 bis 50, Startwert 4
-        sliderDicke.setPreferredSize(new Dimension(120, 30));//Breite und Länge des Sliders
+        JSlider sliderDicke = new JSlider(1, 50, 9); //Von 1 bis 50, Startwert 9
         sliderDicke.setToolTipText("Strichdicke ändern");
 
         //Vorschau für die Auswahl der Dicke
@@ -260,25 +259,52 @@ public class Grafikprogramm extends JFrame {
                 Graphics2D Grafik2D = (Graphics2D) g.create();
                 Grafik2D.setColor(Zeichenfeld.Farbauswahl);
 
-                int x = getWidth() / 2 - dicke / 2; //Damit der Vorschau-Kreis zentriert angezeigt wird
-                int y = getHeight() / 2 - dicke / 2;
+                int x = (getWidth() / 2 - dicke / 2) - 1; //Damit der Vorschau-Kreis zentriert angezeigt wird
+                int y = (getHeight() / 2 - dicke / 2) - 1; //-1, da unten der Kreis 1 px größer dargestellt wird
 
-                Grafik2D.fillOval(x, y, dicke, dicke); //Vorschau-Kreis zeichnen
+                //Vorschau-Kreis zeichnen
+                Grafik2D.fillOval(x, y, dicke +1, dicke +1); //dicke +1, weil Vorschaudicke kleiner wirkt als die Dicke beim Zeichnen
                 Grafik2D.dispose();
             }
         };
 
-        vorschauDicke.setPreferredSize(new Dimension(5, 5));
+        //Größe des Vorschaufensters einstellen. Min- und Max-Size braucht man, weil sonst PreferredSize ignoriert wird
+        Dimension vorschauFenster = new Dimension(60, 60);
+        vorschauDicke.setMinimumSize(vorschauFenster);
+        vorschauDicke.setPreferredSize(vorschauFenster);
+        vorschauDicke.setMaximumSize(vorschauFenster);
+        vorschauDicke.setOpaque(false); //Vorschaufenster an die Hintergrundfarbe anpassen
+        vorschauDicke.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); //Dünner Rahmen in hellgrau um die Vorschau
+
+        //Label, dass die aktuelle Strichdicke anzeigt
+        JLabel strichDicke = new JLabel(sliderDicke.getValue() + " px"); //Neues Label, dass Startwert anzeigt
+        JPanel sliderPanel = new JPanel();
+
+        //Hier wird ein beschrifteter Rahmen um das SliderPanel gezogen, sieht besser aus
+        sliderPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Strichdicke"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5))); //Inhalt des Rahmens im Abstand 5 zu jeder Seite
+        sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.Y_AXIS)); //Slider und Label untereinander anordnen
+        sliderPanel.setOpaque(false);
+
+        //Anzeige der Dicke und Slider linksbündig darstellen
+        strichDicke.setAlignmentX(Component.LEFT_ALIGNMENT);
+        sliderDicke.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         //Es wird abgefragt, wo der Slider steht und dann die Dicke über setStrichdicke() dementsprechend angepasst
         sliderDicke.addChangeListener(e -> {
             int wert = sliderDicke.getValue();
             zeichenfeld.setStrichdicke(wert);
+            strichDicke.setText(wert + " px");
             vorschauDicke.repaint(); //Aktualisierung Vorschau-Kreis
         });
 
+        toolbar.addSeparator();
         toolbar.add(vorschauDicke);
-        toolbar.add(sliderDicke);
+        toolbar.addSeparator();
+        sliderPanel.add(sliderDicke);
+        sliderPanel.add(strichDicke);
+        toolbar.add(sliderPanel);
+        toolbar.addSeparator(new Dimension(30, 10));
 
 
         //Toolbar hinzufügen, Anordnung oben
