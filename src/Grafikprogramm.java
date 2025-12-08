@@ -3,6 +3,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,11 +43,11 @@ public class Grafikprogramm extends JFrame {
             switch (action) {
                 case actionNeu:
                     //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Feld leeren möchte
-                    int sicher = JOptionPane.showConfirmDialog(Grafikprogramm.this,
+                    int sicherNeu = JOptionPane.showConfirmDialog(Grafikprogramm.this,
                             "Sind Sie sicher, dass Sie eine neue Datei anlegen wollen?\nNicht gespeicherte Änderungen gehen verloren!");
 
                     //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
-                    if (sicher == 0) zeichenfeld.leeren();
+                    if (sicherNeu == 0) zeichenfeld.leeren();
                     break;
 
                 case actionOeffnen:
@@ -57,7 +59,12 @@ public class Grafikprogramm extends JFrame {
                     break;
 
                 case actionBeenden:
-                    System.exit(0);
+                    //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Programm beenden möchte
+                    int sicherBeenden = JOptionPane.showConfirmDialog(Grafikprogramm.this,
+                            "Sind Sie sicher, dass Sie das Programm beenden wollen?\nNicht gespeicherte Änderungen gehen verloren!");
+
+                    //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
+                    if (sicherBeenden == 0) System.exit(0);;
                     break;
             }
         };
@@ -110,18 +117,21 @@ public class Grafikprogramm extends JFrame {
         menuDatei.add(neuItem);
         neuItem.setActionCommand(actionNeu);
         neuItem.addActionListener(dateiListener);
+        neuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK)); //Neue Datei: CTRL + N
 
         //Menü-Funktion "Öffnen", um eine Datei zu öffnen
         JMenuItem oeffnenItem = new JMenuItem("Öffnen");
         menuDatei.add(oeffnenItem);
         oeffnenItem.setActionCommand(actionOeffnen);
         oeffnenItem.addActionListener(dateiListener);
+        oeffnenItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK)); //Datei öffnen: CTRL + O
 
         //Menü-Funktion "Speichern", um eine Datei zu speichern
         JMenuItem speichernItem = new JMenuItem("Speichern");
         menuDatei.add(speichernItem);
         speichernItem.setActionCommand(actionSpeichern);
         speichernItem.addActionListener(dateiListener);
+        speichernItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)); //Datei speichern: CTRL + S
 
         menuDatei.addSeparator(); //Trennstrich, sieht hübscher aus
 
@@ -130,6 +140,7 @@ public class Grafikprogramm extends JFrame {
         menuDatei.add(beendenItem);
         beendenItem.setActionCommand(actionBeenden);
         beendenItem.addActionListener(dateiListener);
+        beendenItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)); //Programm beenden: CTRL + Q
 
         //Werkzeugmenü erzeugen
         JMenu menuTools = new JMenu("Werkzeuge");
@@ -139,16 +150,19 @@ public class Grafikprogramm extends JFrame {
         menuTools.add(linieItem);
         linieItem.setActionCommand(actionLinie);
         linieItem.addActionListener(toolListener);
+        linieItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + L
 
         JMenuItem rechteckItem = new JMenuItem("Rechteck");
         menuTools.add(rechteckItem);
         rechteckItem.setActionCommand(actionRechteck);
         rechteckItem.addActionListener(toolListener);
+        rechteckItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Rechteck: CTRL + R
 
         JMenuItem ellipseItem = new JMenuItem("Ellipse");
         menuTools.add(ellipseItem);
         ellipseItem.setActionCommand(actionEllipse);
         ellipseItem.addActionListener(toolListener);
+        ellipseItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Ellipse: CTRL + E
 
         menuTools.addSeparator();
 
@@ -156,16 +170,19 @@ public class Grafikprogramm extends JFrame {
         menuTools.add(stiftItem);
         stiftItem.setActionCommand(actionStift);
         stiftItem.addActionListener(toolListener);
+        stiftItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Stift: CTRL + B
 
         JMenuItem radiererItem = new JMenuItem("Radierer");
         menuTools.add(radiererItem);
         radiererItem.setActionCommand(actionRadierer);
         radiererItem.addActionListener(toolListener);
+        radiererItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + D
 
         JMenuItem farbeItem = new JMenuItem("Farbpalette");
         menuTools.add(farbeItem);
         farbeItem.setActionCommand(actionFarbe);
         farbeItem.addActionListener(toolListener);
+        farbeItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK)); //Werkzeugauswahl Linie: CTRL + F
 
         //Toolbar erzeugen mit einfachen Funktionen
         JToolBar toolbar = new JToolBar();
