@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Zeichenfeld extends JPanel {
-
     private final BufferedImage bild;
     private int pushX;
     private int pushY;
@@ -17,7 +16,7 @@ public class Zeichenfeld extends JPanel {
     private int vorschauY;
     private boolean vorschauAktiv = false;
     private int strichdicke = 4;
-    public static Color farbauswahl = Color.BLACK;
+    private Color farbauswahl = Color.BLACK;
 
     public static final int toolLinie = 0;
     public static final int toolRechteck = 1;
@@ -25,7 +24,7 @@ public class Zeichenfeld extends JPanel {
     public static final int toolRadierer = 3;
     public static final int toolStift = 4;
 
-    int aktuellesTool = toolLinie; //im Initialzustand der Anwendung ist "Linie" ausgewählt
+    private int aktuellesTool = toolLinie; //im Initialzustand der Anwendung ist "Linie" ausgewählt
 
     //Hier wird die Zeichenfläche erstellt
     public Zeichenfeld () {
@@ -130,6 +129,10 @@ public class Zeichenfeld extends JPanel {
         if (neueFarbe != null) { //Wenn die Methode aufgerufen wird und eine Farbe ausgewählt wurde --> Farbe updaten
             farbauswahl = neueFarbe;
         }
+    }
+
+    public Color getFarbauswahl() {
+        return farbauswahl;
     }
 
     public void setTool(int werkzeug) {

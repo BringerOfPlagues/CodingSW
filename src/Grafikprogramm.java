@@ -12,13 +12,14 @@ import java.util.Objects;
 
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
-    public Zeichenfeld zeichenfeld; //Zum später aufrufen
+    private Zeichenfeld zeichenfeld; //Zum später aufrufen
 
     //Die folgenden zwei Objekte werden im toolListener benötigt
     //und müssen deshalb davor als Instanzvariablen deklariert werden
     private JPanel vorschauDicke;
     private JSlider sliderDicke;
 
+    //Action-Strings für Menü- und Toolbar-Befehle
     final String actionNeu = "Neu";
     final String actionOeffnen = "Öffnen";
     final String actionSpeichern = "Speichern";
@@ -32,7 +33,6 @@ public class Grafikprogramm extends JFrame {
     final String actionDicker = "Dicker";
     final String actionDuenner = "Dünner";
 
-
     public Grafikprogramm() {
         setTitle("Grafikprogramm");
         setSize(1200,800);
@@ -40,10 +40,13 @@ public class Grafikprogramm extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        //Zeichenfeld in das Fenster hinzufügen
+        zeichenfeld = new Zeichenfeld();
+        add(zeichenfeld, BorderLayout.CENTER);
+
         //ActionListener für alle Datei-Funktionen
         ActionListener dateiListener = e -> {
             String action = e.getActionCommand();
-
             switch (action) {
                 case actionNeu:
                     //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Feld leeren möchte
@@ -76,7 +79,6 @@ public class Grafikprogramm extends JFrame {
         //ActionListener für alle Tools
         ActionListener toolListener = e -> {
             String action = e.getActionCommand();
-
             switch (action) {
                 case actionLinie:
                     //Aktuelles Tool auf Linie setzen
@@ -291,7 +293,7 @@ public class Grafikprogramm extends JFrame {
 
                 int dicke = sliderDicke.getValue();
                 Graphics2D g2 = (Graphics2D) g.create(); //Zur Darstellung der Live-Vorschau, ohne die Bilddatei zu verändern
-                g2.setColor(Zeichenfeld.farbauswahl);
+                g2.setColor(zeichenfeld.getFarbauswahl());
 
                 int x = (getWidth() / 2 - dicke / 2) - 1; //Damit der Vorschau-Kreis zentriert angezeigt wird
                 int y = (getHeight() / 2 - dicke / 2) - 1; //-1, da unten der Kreis 1 px größer dargestellt wird
@@ -342,11 +344,6 @@ public class Grafikprogramm extends JFrame {
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
-
-        //Zeichenfeld in das Fenster hinzufügen
-        zeichenfeld = new Zeichenfeld();
-        add(zeichenfeld, BorderLayout.CENTER);
-
         setVisible(true);
     }
 
@@ -407,7 +404,7 @@ public class Grafikprogramm extends JFrame {
 
             // Wird ausgelöst, wenn das Programm die Datei aus technischen Gründen nicht speichern kann (I/O-Fehler)
             catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Fehler beim Speichern" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Fehler beim Speichern: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -437,7 +434,7 @@ public class Grafikprogramm extends JFrame {
             }
 
             catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Fehler beim Öffnen" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Fehler beim Öffnen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
