@@ -10,15 +10,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-// Verwendete Icons aus "Material Design Icons" – https://pictogrammers.com
-// Lizenz: Apache License 2.0
-
-//GitHub Repository: https://github.com/BringerOfPlagues/CodingSW
 public class Grafikprogramm extends JFrame {
     // Hier wird das Fenster erstellt
     public Zeichenfeld zeichenfeld; //Zum später aufrufen
 
-    //Die folgenden zwei Objekte werden im toolListener benötigt und müssen deshalb vor dem Listener zugewiesen werden
+    //Die folgenden zwei Objekte werden im toolListener benötigt
+    //und müssen deshalb davor als Instanzvariablen deklariert werden
     private JPanel vorschauDicke;
     private JSlider sliderDicke;
 
@@ -40,7 +37,7 @@ public class Grafikprogramm extends JFrame {
         setTitle("Grafikprogramm");
         setSize(1200,800);
         setResizable(false); //feste Fenstergröße, damit Zeichenfläche und Bild immer gleich groß ist
-        setLocationRelativeTo(null); //Fenster zentrieren
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //ActionListener für alle Datei-Funktionen
@@ -110,6 +107,7 @@ public class Grafikprogramm extends JFrame {
                     vorschauDicke.repaint(); //Aktualisierung Farbe des Vorschau-Punktes
                     break;
 
+                //Strichdicke über das Menü oder über Shortcuts verändern
                 case actionDicker:
                     if (sliderDicke.getValue() < sliderDicke.getMaximum()) {
                         sliderDicke.setValue(sliderDicke.getValue() + 1);
@@ -162,6 +160,7 @@ public class Grafikprogramm extends JFrame {
         beendenItem.addActionListener(dateiListener);
         beendenItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK)); //Programm beenden: CTRL + Q
 
+        //Menü für die Formen erzeugen
         JMenu menuFormen = new JMenu("Formen");
         menuBar.add(menuFormen);
 
@@ -291,7 +290,7 @@ public class Grafikprogramm extends JFrame {
                 super.paintComponent(g);
 
                 int dicke = sliderDicke.getValue();
-                Graphics2D g2 = (Graphics2D) g.create();
+                Graphics2D g2 = (Graphics2D) g.create(); //Zur Darstellung der Live-Vorschau, ohne die Bilddatei zu verändern
                 g2.setColor(Zeichenfeld.farbauswahl);
 
                 int x = (getWidth() / 2 - dicke / 2) - 1; //Damit der Vorschau-Kreis zentriert angezeigt wird
@@ -303,7 +302,7 @@ public class Grafikprogramm extends JFrame {
             }
         };
 
-        //Größe des Vorschaufensters einstellen. Min- und Max-Size braucht man, weil sonst PreferredSize ignoriert wird
+        //Größe des Vorschaufensters einstellen. Min- und Max-Size braucht man, weil sonst PreferredSize überschrieben wird
         Dimension vorschauFenster = new Dimension(60, 60);
         vorschauDicke.setMinimumSize(vorschauFenster);
         vorschauDicke.setPreferredSize(vorschauFenster);
@@ -312,7 +311,7 @@ public class Grafikprogramm extends JFrame {
         vorschauDicke.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 1)); //Dünner Rahmen in hellgrau um die Vorschau
 
         //Label, dass die aktuelle Strichdicke anzeigt
-        JLabel strichDicke = new JLabel(sliderDicke.getValue() + " px"); //Neues Label, dass Startwert anzeigt
+        JLabel strichDicke = new JLabel(sliderDicke.getValue() + " px");
         JPanel sliderPanel = new JPanel();
 
         //Hier wird ein beschrifteter Rahmen um das SliderPanel gezogen, sieht besser aus
@@ -340,7 +339,6 @@ public class Grafikprogramm extends JFrame {
         sliderPanel.add(strichDicke);
         toolbar.add(sliderPanel);
         toolbar.addSeparator(new Dimension(30, 10));
-
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
@@ -378,16 +376,15 @@ public class Grafikprogramm extends JFrame {
     private void speichern() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Bild speichern");
-        //Hier wird der Filter von oben benutzt
-        fileChooser.setFileFilter(jpgFilter());
+        fileChooser.setFileFilter(jpgFilter()); //Hier wird der Filter von oben benutzt
 
-        //Das Fenster für die Speicherung wird geöffnet und das was der Benutzer macht wird in auswahl geschrieben
+        //Das Fenster für die Speicherung wird geöffnet und die Aktion, die der Benutzer ausführt, wird in auswahl geschrieben
         int auswahl = fileChooser.showSaveDialog(this);
 
         //Wird nur ausgeführt, wenn der Benutzer einen Pfad ausgewählt und "speichern" gedrückt hat
         if(auswahl == JFileChooser.APPROVE_OPTION) {
 
-            //Ausgewählte Datei holen
+            //Datei holen
             File file = fileChooser.getSelectedFile();
 
             //Dateiname holen und wieder in Kleinbuchstaben speichern, für eine einfachere Prüfung
@@ -400,17 +397,16 @@ public class Grafikprogramm extends JFrame {
 
             try {
                 //Aktuelles Bild holen und als .jpg am ausgewählten Speicherort speichern. Rückgabe true, falls erfolgreich
-                boolean Speicherversuch = ImageIO.write(zeichenfeld.getBild(), "jpg", file);
+                boolean speicherversuch = ImageIO.write(zeichenfeld.getBild(), "jpg", file);
 
-                if (!Speicherversuch) {
+                if (!speicherversuch) {
                     //Falls nicht erfolgreich, Fehlermeldung ausgeben. Fenster im Design einer Fehlermeldung.
                     JOptionPane.showMessageDialog(this, "Das Bild konnte nicht gespeichert werden!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
 
-            //ImageIO.write will, dass man die IOException behandelt
+            // Wird ausgelöst, wenn das Programm die Datei aus technischen Gründen nicht speichern kann (I/O-Fehler)
             catch (IOException e) {
-                //Wenn etwas schief läuft Fehlermeldung anzeigen
                 JOptionPane.showMessageDialog(this, "Fehler beim Speichern" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -428,7 +424,7 @@ public class Grafikprogramm extends JFrame {
             File file = fileChooser.getSelectedFile();
 
             try {
-                //Die Pixel der .jpg-Datei werden in "laden" gespeichert, damit kann es dann auf dem Zeichenfeld wieder projeziert werden
+                //Die Pixel der .jpg-Datei werden in "laden" gespeichert, damit kann es dann auf dem Zeichenfeld wieder projiziert werden
                 BufferedImage laden = ImageIO.read(file);
 
                 if(laden == null) {
