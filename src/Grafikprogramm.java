@@ -2,9 +2,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +36,7 @@ public class Grafikprogramm extends JFrame {
         setSize(1200,800);
         setResizable(false); //feste Fenstergröße, damit Zeichenfläche und Bild immer gleich groß ist
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         //Zeichenfeld in das Fenster hinzufügen
         zeichenfeld = new Zeichenfeld();
@@ -66,12 +64,7 @@ public class Grafikprogramm extends JFrame {
                     break;
 
                 case actionBeenden:
-                    //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Programm beenden möchte
-                    int sicherBeenden = JOptionPane.showConfirmDialog(Grafikprogramm.this,
-                            "Sind Sie sicher, dass Sie das Programm beenden wollen?\nNicht gespeicherte Änderungen gehen verloren!");
-
-                    //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
-                    if (sicherBeenden == 0) System.exit(0);
+                    beenden();
                     break;
             }
         };
@@ -344,6 +337,15 @@ public class Grafikprogramm extends JFrame {
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
+
+        //Damit der Sicherheitsdialog angezeigt wird, wenn man über das "X" beenden möchte
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                beenden();
+            }
+        });
+
         setVisible(true);
     }
 
@@ -436,6 +438,18 @@ public class Grafikprogramm extends JFrame {
             catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Fehler beim Öffnen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    private void beenden() {
+        //Ein Fenster öffnet sich, in dem man bestätigen muss, dass man das Programm beenden möchte
+        int sicherBeenden = JOptionPane.showConfirmDialog(Grafikprogramm.this,
+                "Sind Sie sicher, dass Sie das Programm beenden wollen?\nNicht gespeicherte Änderungen gehen verloren!");
+
+        //Betätigt man "Ja" wird sicher auf 0 gesetzt und das Feld wird initialisiert
+        if (sicherBeenden == 0) {
+            dispose();
+            System.exit(0);
         }
     }
 }
