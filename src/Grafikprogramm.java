@@ -420,8 +420,15 @@ public class Grafikprogramm extends JFrame {
 
         int auswahl = fileChooser.showOpenDialog(this);
 
-        if (auswahl == JFileChooser.APPROVE_OPTION) {
+        if (auswahl == JFileChooser.APPROVE_OPTION ) {
             File file = fileChooser.getSelectedFile();
+
+            //Unter Dateityp im Öffnen-Dialogfenster kann man "Alle Dateien" auswählen
+            //Um auch dort nur .jpg zuzulassen folgt eine weitere Prüfung auf die Endung der Datei
+            if (!file.getName().toLowerCase().endsWith(".jpg")) {
+                JOptionPane.showMessageDialog(this, "Nur Dateien im Format .jpg sind zulässig!", "Fehler", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             try {
                 //Die Pixel der .jpg-Datei werden in "laden" gespeichert, damit kann es dann auf dem Zeichenfeld wieder projiziert werden
