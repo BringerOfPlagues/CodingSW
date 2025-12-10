@@ -33,9 +33,7 @@ public class Grafikprogramm extends JFrame {
 
     public Grafikprogramm() {
         setTitle("Grafikprogramm");
-        setSize(1200,800);
         setResizable(false); //feste Fenstergröße, damit Zeichenfläche und Bild immer gleich groß ist
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         //Zeichenfeld in das Fenster hinzufügen
@@ -337,6 +335,9 @@ public class Grafikprogramm extends JFrame {
 
         //Toolbar hinzufügen, Anordnung oben
         add(toolbar, BorderLayout.NORTH);
+
+        pack();
+        setLocationRelativeTo(null);
 
         //Damit der Sicherheitsdialog angezeigt wird, wenn man über das "X" beenden möchte
         addWindowListener(new WindowAdapter() {
